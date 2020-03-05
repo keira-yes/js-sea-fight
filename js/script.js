@@ -69,6 +69,14 @@ const fire = (e) => {
     if (index >= 0) {
       show.hit(target);
       play.updateData = 'hit';
+      ship.hit[index] = 'x';
+      const life = ship.hit.indexOf('');
+      if (life < 0) {
+        play.updateData = 'dead';
+        for (let id of ship.location) {
+          show.dead(document.getElementById(id));
+        }
+      }
     }
   }
 };
