@@ -5,7 +5,28 @@ const record = document.getElementById('record'),
   enemy = document.getElementById('enemy'),
   again = document.getElementById('again');
 
-play = {
+const game = {
+  ships: [
+    {
+      location: ['00', '01', '02', '03'],
+      hit: ['', '', '', '']
+    },
+    {
+      location: ['68', '78', '88'],
+      hit: ['', '', '']
+    },
+    {
+      location: ['43', '44'],
+      hit: ['', '']
+    },
+    {
+      location: ['90'],
+      hit: ['']
+    }
+  ]
+};
+
+const play = {
   record: 0,
   shot: 0,
   hit: 0,
@@ -23,14 +44,14 @@ play = {
 };
 
 const show = {
-  hit() {
-
+  hit(elem) {
+    this.changeClass(elem, 'hit');
   },
   miss(elem) {
     this.changeClass(elem, 'miss');
   },
-  dead() {
-
+  dead(elem) {
+    this.changeClass(elem, 'dead');
   },
   changeClass(elem, value) {
     elem.className = value;
@@ -39,8 +60,17 @@ const show = {
 
 const fire = (e) => {
   let target = e.target;
+  if (target.className.length > 0 || target.tagName !== "TD") return;
   show.miss(target);
   play.updateData = 'shot';
+  for (let i = 0; i < game.ships.length; i++) {
+    const ship = game.ships[i];
+    const index = ship.location.indexOf(target.id);
+    if (index >= 0) {
+      show.hit(target);
+      play.updateData = 'hit';
+    }
+  }
 };
 
 const init = () => {
